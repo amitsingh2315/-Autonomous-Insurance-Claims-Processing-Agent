@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Insurance Claims Processing Agent</title>
+  <meta name="description" content="Autonomous FNOL document processing powered by LangGraph and Groq AI" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/static/style.css" />
+  <link rel="stylesheet" href="/static/highlight.css" />
+  <style>
+    /* ── Toast ── */
+    .toast {
+      position:fixed; bottom:28px; right:28px; z-index:9999;
+      padding:14px 22px; border-radius:10px; font-size:.9rem; font-weight:600;
+      backdrop-filter:blur(12px); border:1px solid rgba(255,255,255,.1);
+      transform:translateY(20px); opacity:0; transition:all .35s ease;
+      max-width:360px;
+    }
+    .toast.show  { transform:translateY(0); opacity:1; }
+    .toast-error { background:rgba(127,29,29,.9); color:#fca5a5; border-color:rgba(239,68,68,.4); }
+    .toast-info  { background:rgba(30,58,138,.9); color:#93c5fd; border-color:rgba(59,130,246,.4); }
+    /* ── Spinner ── */
+    .spinner {
+      width:14px; height:14px; border:2px solid rgba(255,255,255,.3);
+      border-top-color:#fff; border-radius:50%; animation:rotate .7s linear infinite; display:inline-block;
+    }
+    @keyframes rotate { to{ transform:rotate(360deg); } }
+  </style>
+</head>
+<body>
+
+<div class="app">
+
+  <!-- ── Header ── -->
+  <header>
+    <div class="logo-badge">
+      <span class="dot"></span>
+      Autonomous AI System &nbsp;·&nbsp; LangGraph + Groq
+    </div>
+    <h1>Insurance Claims<br/>Processing Agent</h1>
+    <p>Upload an FNOL PDF and get instant structured results — field extraction, validation, claim routing, and AI-generated reasoning.</p>
+  </header>
+
+  <!-- ── Upload card ── -->
+  <div class="upload-card" id="upload-card">
+    <div class="upload-icon">📄</div>
+    <div class="upload-title">Drop your FNOL document here</div>
+    <div class="upload-sub">or click to browse files from your computer</div>
+    <button class="btn-primary" id="btn-browse">
+      &#8593; Choose PDF File
+    </button>
+    <p class="file-types">Supported: PDF &nbsp;·&nbsp; Max size: 20 MB</p>
+    <input type="file" id="file-input" accept=".pdf" />
+
+    <!-- Selected file chip -->
+    <div class="file-chip" id="file-chip">
+      <span>📎</span>
+      <span class="chip-name" id="chip-name"></span>
+      <button class="remove-file" id="remove-file" title="Remove file">✕</button>
+    </div>
+  </div>
+
+  <!-- Process button -->
+  <div style="text-align:center">
+    <button class="btn-primary btn-process" id="btn-process">&#9654; Process Claim</button>
+  </div>
+
+  <!-- ── Pipeline progress ── -->
+  <div class="progress-section" id="progress-section">
+    <div class="steps">
+
+      <div class="step" id="step-extract-text" data-num="1">
+        <div class="step-icon">1</div>
+        <div class="step-info">
+          <div class="step-label">Text Extraction</div>
+          <div class="step-desc">Reading PDF with pdfplumber</div>
+        </div>
+        <span class="step-badge badge-auto">Automation</span>
+      </div>
+
+      <div class="step" id="step-extract-fields" data-num="2">
+        <div class="step-icon">2</div>
+        <div class="step-info">
+          <div class="step-label">Field Extraction</div>
+          <div class="step-desc">Groq LLM parsing FNOL fields</div>
+        </div>
+        <span class="step-badge badge-llm">Groq LLM</span>
+      </div>
+
+      <div class="step" id="step-validate-fields" data-num="3">
+        <div class="step-icon">3</div>
+        <div class="step-info">
+          <div class="step-label">Validation</div>
+          <div class="step-desc">Checking mandatory fields</div>
+        </div>
+        <span class="step-badge badge-auto">Automation</span>
+      </div>
+
+      <div class="step" id="step-route-claim" data-num="4">
+        <div class="step-icon">4</div>
+        <div class="step-info">
+          <div class="step-label">Claim Routing</div>
+          <div class="step-desc">Applying deterministic business rules</div>
+        </div>
+        <span class="step-badge badge-auto">Automation</span>
+      </div>
+
+      <div class="step" id="step-assign-claim" data-num="5">
+        <div class="step-icon">5</div>
+        <div class="step-info">
+          <div class="step-label">Assignment</div>
+          <div class="step-desc">Intelligent claim routing</div>
+        </div>
+        <span class="step-badge badge-auto">Automation</span>
+      </div>
+
+      <div class="step" id="step-reasoning" data-num="6">
+        <div class="step-icon">6</div>
+        <div class="step-info">
+          <div class="step-label">Reasoning</div>
+          <div class="step-desc">Groq LLM generating explanation</div>
+        </div>
+        <span class="step-badge badge-llm">Groq LLM</span>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── Results ── -->
+  <div id="results">
+
+    <!-- Route banner -->
+    <div class="route-banner route-fast" id="route-banner">
+      <div>
+        <div class="route-label">Recommended Route</div>
+        <div class="route-name" id="route-name">—</div>
+      </div>
+      <div class="route-score">
+        <div class="score-val" id="score-val">—</div>
+        <div class="score-label">Confidence Score</div>
+      </div>
+    </div>
+
+    <!-- Decision Breakdown -->
+    <div class="reasoning-box" style="margin-bottom: 20px;">
+      <h3>📋 Decision Breakdown</h3>
+      <div id="decision-flowchart" class="flowchart-container"></div>
+    </div>
+
+    <!-- Reasoning -->
+    <div class="reasoning-box">
+      <h3>&#129302; AI Reasoning</h3>
+      <p id="reasoning-text"></p>
+    </div>
+
+    <!-- Metrics -->
+    <div class="metrics">
+      <div class="metric-card" style="background: rgba(59, 130, 246, 0.1); border-color: rgba(59, 130, 246, 0.3);">
+        <div class="metric-label" style="color: #93c5fd;">Assigned To</div>
+        <div class="metric-value" id="m-assigned">—</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">Fraud Score</div>
+        <div class="metric-value" id="m-fraud">—</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">Claim Type</div>
+        <div class="metric-value" id="m-claim-type">—</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">Estimated Damage</div>
+        <div class="metric-value" id="m-damage">—</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">Missing Fields</div>
+        <div class="metric-value" id="m-missing">—</div>
+        <div class="metric-sub">mandatory fields absent</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">Policy Number</div>
+        <div class="metric-value" id="m-policy" style="font-size:1rem">—</div>
+      </div>
+    </div>
+
+    <!-- Missing fields banner (shown only if any) -->
+    <div class="missing-banner" id="missing-banner" style="display:none">
+      <span style="font-size:1.5rem">⚠️</span>
+      <div>
+        <h3>Missing Mandatory Fields</h3>
+        <ul class="missing-list" id="missing-list"></ul>
+      </div>
+    </div>
+
+    <!-- Extracted fields -->
+    <div class="fields-grid">
+
+      <div class="field-section">
+        <h3>&#128196; Policy Info</h3>
+        <div id="sec-policy"></div>
+      </div>
+
+      <div class="field-section">
+        <h3>&#128205; Incident Info</h3>
+        <div id="sec-incident"></div>
+      </div>
+
+      <div class="field-section">
+        <h3>&#128100; Involved Parties</h3>
+        <div id="sec-parties"></div>
+      </div>
+
+      <div class="field-section">
+        <h3>&#128663; Asset Details</h3>
+        <div id="sec-asset"></div>
+      </div>
+
+      <div class="field-section">
+        <h3>&#128203; Other Info</h3>
+        <div id="sec-other"></div>
+      </div>
+
+    </div>
+
+    <!-- Raw JSON -->
+    <div class="json-section">
+      <button class="json-toggle" id="json-toggle">📄 View Raw JSON</button>
+      <div class="json-box" id="json-box">
+        <pre id="json-pre"></pre>
+      </div>
+    </div>
+
+    <!-- Reset -->
+    <button class="btn-reset" id="btn-reset">&#8617; Process Another Document</button>
+
+  </div><!-- /results -->
+
+  <!-- ── Employee Directory ── -->
+  <div class="employee-directory" id="employee-directory" style="margin-top: 44px;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+      <h2 style="font-size: 1.5rem; font-weight: 700; background: linear-gradient(135deg, #fff 30%, var(--accent2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">Employee Directory</h2>
+      <button class="btn-reset" id="btn-refresh-emp" style="margin: 0;">↻ Refresh Workload</button>
+    </div>
+    <div class="metrics" id="employee-grid">
+      <!-- Employees will be populated here -->
+      <div style="color: var(--muted); font-style: italic; font-size: 0.9rem;">Loading employee data...</div>
+    </div>
+  </div>
+
+  <!-- ── Footer ── -->
+  <footer>
+    <p>Built with LangGraph &middot; Groq AI (Llama 3.3 70B) &middot; FastAPI &middot; pdfplumber</p>
+  </footer>
+
+</div><!-- /app -->
+
+<script src="/static/app.js"></script>
+</body>
+</html>

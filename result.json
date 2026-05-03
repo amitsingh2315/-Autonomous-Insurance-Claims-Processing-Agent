@@ -1,0 +1,44 @@
+{
+  "extractedFields": {
+    "policy_info": {
+      "policy_number": "AUTO-2024-78432",
+      "policyholder_name": "Robert James Mitchell",
+      "effective_date_start": "2024-01-15",
+      "effective_date_end": "2025-01-15"
+    },
+    "incident_info": {
+      "incident_date": "2024-03-15",
+      "incident_time": "14:35",
+      "incident_location": "Intersection of Main St and Oak Ave, Springfield, IL 62701",
+      "incident_description": "The insured vehicle was traveling northbound on Main Street at approximately 35 mph when a third-party vehicle ran a red light at the intersection of Oak Avenue and collided with the insured vehicle on the driver side. The impact caused significant damage to the driver side door and front fender. The insured driver applied brakes but was unable to avoid the collision. Weather conditions were clear and the road surface was dry. Police report was filed (Report #SPD-2024-04521)."
+    },
+    "involved_parties": {
+      "claimant_name": "Robert James Mitchell",
+      "claimant_contact": "(555) 987-6543, r.mitchell@email.com",
+      "third_parties": [
+        "Jennifer L. Thompson"
+      ],
+      "third_party_contacts": [
+        "(555) 321-0987"
+      ]
+    },
+    "asset_details": {
+      "asset_type": "vehicle",
+      "asset_id": "4T1G11AK5NU000123",
+      "estimated_damage": 18500
+    },
+    "other": {
+      "claim_type": "collision",
+      "attachments": [
+        "Police Report (SPD-2024-04521)",
+        "Photos of vehicle damage (4 images)",
+        "Repair estimate from ABC Auto Body"
+      ],
+      "initial_estimate": 18500
+    }
+  },
+  "missingFields": [],
+  "recommendedRoute": "Fast-track",
+  "confidenceScore": 0.85,
+  "reasoning": "This claim was routed to the Fast-track queue due to the clear liability of the third-party vehicle, as evidenced by the police report and the incident description, which indicates the third-party vehicle ran a red light. The availability of all necessary information, as indicated by the \"Missing Fields: None\" notation, also contributed to the Fast-track routing decision. Additionally, the estimated damage of $18,500 is within the typical range for Fast-track claims, which further supported this routing decision. The overall straightforward nature of the claim, with no apparent complexities or disputes, made it suitable for expedited processing through the Fast-track queue."
+}
