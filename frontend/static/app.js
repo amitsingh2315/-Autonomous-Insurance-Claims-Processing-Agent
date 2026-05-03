@@ -2,7 +2,10 @@
    Insurance Claims Processing Agent — Frontend JS
    ═══════════════════════════════════════════════════════════════════════════ */
 
-const API_BASE = window.location.origin;
+// Determine API URL based on environment
+const API_BASE = window.location.hostname.includes('onrender.com') 
+  ? 'https://insurance-agent-backend.onrender.com' 
+  : window.location.origin;
 
 // ── DOM refs ─────────────────────────────────────────────────────────────
 const uploadCard    = document.getElementById('upload-card');
