@@ -2,9 +2,9 @@
 CLI entry point for the Insurance Claims Processing Agent.
 
 Usage:
-    python -m src.main --pdf data/sample_fnol.pdf
-    python -m src.main --pdf data/sample_fnol.pdf --output result.json
-    python -m src.main --pdf data/sample_fnol.pdf --verbose
+    python -m backend.main --pdf data/sample_fnol.pdf
+    python -m backend.main --pdf data/sample_fnol.pdf --output result.json
+    python -m backend.main --pdf data/sample_fnol.pdf --verbose
 """
 
 import argparse
@@ -21,7 +21,7 @@ sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8', errors='repla
 # Add the project root to sys.path so imports work
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from src.graph import run_pipeline, format_output
+from backend.graph import run_pipeline, format_output
 
 
 def setup_logging(verbose: bool = False) -> None:
@@ -54,9 +54,9 @@ def main():
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
-  python -m src.main --pdf data/sample_fnol.pdf
-  python -m src.main --pdf data/sample_fnol.pdf --output result.json
-  python -m src.main --pdf data/sample_fnol.pdf --verbose
+  python -m backend.main --pdf data/sample_fnol.pdf
+  python -m backend.main --pdf data/sample_fnol.pdf --output result.json
+  python -m backend.main --pdf data/sample_fnol.pdf --verbose
         """,
     )
     parser.add_argument(

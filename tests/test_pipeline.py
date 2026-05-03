@@ -12,8 +12,8 @@ import os
 # Add project root to path
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from src.validator import validate_fields
-from src.router import route_claim
+from backend.validator import validate_fields
+from backend.router import route_claim
 
 
 # =============================================================================
@@ -200,7 +200,7 @@ class TestIntegration:
 
     def test_full_pipeline(self):
         """Test the full pipeline with a sample PDF (if available)."""
-        from src.graph import run_pipeline, format_output
+        from backend.graph import run_pipeline, format_output
 
         sample_pdf = os.path.join(
             os.path.dirname(os.path.dirname(os.path.abspath(__file__))),

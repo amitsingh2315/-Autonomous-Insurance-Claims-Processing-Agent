@@ -4,7 +4,7 @@ FastAPI server for the Insurance Claims Processing Agent.
 Serves both the REST API and the frontend UI.
 
 Usage:
-    uvicorn src.api:app --reload --port 8000
+    uvicorn backend.api:app --reload --port 8000
 """
 
 import logging

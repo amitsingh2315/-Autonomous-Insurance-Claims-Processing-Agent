@@ -34,7 +34,7 @@ insurance-agent/
 ├── data/
 │   ├── generate_sample_pdf.py   # Generate sample FNOL PDF
 │   └── sample_fnol.pdf          # Generated sample document
-├── src/
+├── backend/
 │   ├── __init__.py
 │   ├── state.py                 # Shared state definition (TypedDict)
 │   ├── prompts.py               # LLM prompt templates
@@ -93,20 +93,20 @@ python data/generate_sample_pdf.py
 
 ```bash
 # Process a PDF document
-python -m src.main --pdf data/sample_fnol.pdf
+python -m backend.main --pdf data/sample_fnol.pdf
 
 # Save output to file
-python -m src.main --pdf data/sample_fnol.pdf --output result.json
+python -m backend.main --pdf data/sample_fnol.pdf --output result.json
 
 # Verbose logging
-python -m src.main --pdf data/sample_fnol.pdf --verbose
+python -m backend.main --pdf data/sample_fnol.pdf --verbose
 ```
 
 ### FastAPI Server
 
 ```bash
 # Start the server
-uvicorn src.api:app --reload --port 8000
+uvicorn backend.api:app --reload --port 8000
 
 # Process a PDF via API
 curl -X POST "http://localhost:8000/process" \
