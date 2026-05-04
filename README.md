@@ -1,203 +1,232 @@
-# 🏥 Autonomous Insurance Claims Processing Agent
+# 🚀 Autonomous Insurance Claims Processing Agent
 
-An end-to-end AI-powered system for processing First Notice of Loss (FNOL) insurance documents. Uses a **hybrid architecture** combining rule-based automation with LLM-powered intelligence via **LangGraph** and **Groq AI**.
+🔗 **Live Demo:** https://autonomous-insurance-claims-processing.onrender.com/
+📦 **GitHub Repo:** (https://github.com/amitsingh2315/-Autonomous-Insurance-Claims-Processing-Agent)
+
+---
+
+## 📌 Overview
+
+This project is an **AI-powered autonomous insurance claims processing system** that analyzes FNOL (First Notice of Loss) documents and automatically:
+
+* Extracts key claim information
+* Identifies missing or inconsistent fields
+* Classifies claims
+* Routes them to the correct workflow
+* Assigns claims to relevant employees
+* Provides human-readable reasoning
+
+---
+
+## 🎯 Problem Statement
+
+As per assignment :
+
+Build an intelligent system that:
+
+* Extracts structured data from FNOL documents
+* Detects missing fields
+* Applies business rules
+* Routes claims intelligently
+* Generates explanation for decisions
+
+---
+
+## 🧠 Key Features
+
+### ✅ 1. Smart Data Extraction
+
+* Extracts:
+
+  * Policy details
+  * Incident info
+  * Parties involved
+  * Asset details
+  * Claim metadata
+
+---
+
+### ✅ 2. Missing Field Detection
+
+* Automatically detects incomplete claims
+* Flags missing mandatory fields
+
+---
+
+### ✅ 3. Rule-Based Claim Routing
+
+| Condition       | Route            |
+| --------------- | ---------------- |
+| Damage < 25,000 | Fast-track       |
+| Missing fields  | Manual Review    |
+| Fraud keywords  | Investigation    |
+| Injury claim    | Specialist Queue |
+
+---
+
+### ✅ 4. AI Reasoning (LLM)
+
+* Uses Groq LLM
+* Generates human-readable explanation
+
+---
+
+### ✅ 5. Employee Assignment System (🔥 Bonus)
+
+* Claims auto-assigned based on:
+
+  * Route type
+  * Employee role
+  * Current workload
+
+---
+
+### ✅ 6. Decision Flow Visualization
+
+* Flowchart-style explanation
+* Easy to understand UI/UX
+
+---
+
+### ✅ 7. Confidence Score
+
+* Smart confidence based on:
+
+  * Data completeness
+  * Rule certainty
+  * Fraud signals
 
 ---
 
 ## 🏗️ Architecture
 
-```
-PDF Input → Text Extraction → Field Extraction → Validation → Routing → Reasoning → JSON Output
-              (pdfplumber)       (Groq LLM)      (rule-based)  (rule-based)  (Groq LLM)
-```
-
-| Component | Type | Technology |
-|-----------|------|-----------|
-| Text Extraction | Deterministic | pdfplumber |
-| Field Extraction | Agentic (LLM) | Groq (Llama 3.3 70B) |
-| Field Validation | Rule-based | Python |
-| Claim Routing | Rule-based | Python |
-| Reasoning | Agentic (LLM) | Groq (Llama 3.3 70B) |
-
-### LangGraph Workflow
-
-```
-START → extract_text → extract_fields → validate_fields → route_claim → generate_reasoning → END
-```
-
----
-
-## 📁 Project Structure
-
-```
-insurance-agent/
-├── data/
-│   ├── generate_sample_pdf.py   # Generate sample FNOL PDF
-│   └── sample_fnol.pdf          # Generated sample document
-├── backend/
-│   ├── __init__.py
-│   ├── state.py                 # Shared state definition (TypedDict)
-│   ├── prompts.py               # LLM prompt templates
-│   ├── extractor.py             # PDF text + LLM field extraction
-│   ├── validator.py             # Rule-based field validation
-│   ├── router.py                # Rule-based claim routing
-│   ├── reasoning.py             # LLM reasoning generation
-│   ├── graph.py                 # LangGraph workflow definition
-│   ├── main.py                  # CLI entry point
-│   └── api.py                   # FastAPI REST API (bonus)
-├── tests/
-│   └── test_pipeline.py         # Unit + integration tests
-├── .env.example                 # Environment variable template
-├── requirements.txt             # Python dependencies
-└── README.md                    # This file
-```
-
----
-
-## 🚀 Setup & Installation
-
-### Prerequisites
-- Python 3.10+
-- Groq API key (free at [console.groq.com](https://console.groq.com/keys))
-
-### Steps
-
-```bash
-# 1. Clone / navigate to the project
-cd insurance-agent
-
-# 2. Create virtual environment
-python -m venv venv
-venv\Scripts\activate        # Windows
-# source venv/bin/activate   # macOS/Linux
-
-# 3. Install dependencies
-pip install -r requirements.txt
-
-# 4. Configure environment
-copy .env.example .env       # Windows
-# cp .env.example .env       # macOS/Linux
-
-# 5. Add your Groq API key to .env
-# Edit .env and set: GROQ_API_KEY=your-actual-key
-
-# 6. Generate sample PDF (for testing)
-python data/generate_sample_pdf.py
-```
-
----
-
-## 📋 Usage
-
-### CLI
-
-```bash
-# Process a PDF document
-python -m backend.main --pdf data/sample_fnol.pdf
-
-# Save output to file
-python -m backend.main --pdf data/sample_fnol.pdf --output result.json
-
-# Verbose logging
-python -m backend.main --pdf data/sample_fnol.pdf --verbose
-```
-
-### FastAPI Server
-
-```bash
-# Start the server
-uvicorn backend.api:app --reload --port 8000
-
-# Process a PDF via API
-curl -X POST "http://localhost:8000/process" \
-  -F "file=@data/sample_fnol.pdf"
-
-# Health check
-curl http://localhost:8000/health
-```
-
----
-
-## 📤 Output Format
-
-```json
-{
-  "extractedFields": {
-    "policy_info": {
-      "policy_number": "AUTO-2024-78432",
-      "policyholder_name": "Robert James Mitchell",
-      "effective_date_start": "2024-01-15",
-      "effective_date_end": "2025-01-15"
-    },
-    "incident_info": {
-      "incident_date": "2024-03-15",
-      "incident_time": "14:35",
-      "incident_location": "Intersection of Main St and Oak Ave, Springfield, IL",
-      "incident_description": "..."
-    },
-    "involved_parties": { ... },
-    "asset_details": { ... },
-    "other": { ... }
-  },
-  "missingFields": [],
-  "recommendedRoute": "Fast-track",
-  "confidenceScore": 0.89,
-  "reasoning": "This claim qualifies for Fast-track processing..."
-}
-```
-
----
-
-## 🔀 Routing Rules
-
-| Priority | Condition | Route |
-|----------|-----------|-------|
-| 1 (Highest) | Description contains "fraud", "inconsistent", "staged" | **Investigation** |
-| 2 | Mandatory fields missing | **Manual Review** |
-| 3 | Claim type = "injury" | **Specialist Queue** |
-| 4 | Estimated damage < $25,000 | **Fast-track** |
-| 5 (Default) | No special flags | **Standard Processing** |
-
----
-
-## 🧪 Testing
-
-```bash
-# Run unit tests (no API key needed)
-python -m pytest tests/ -v
-
-# Run integration tests (requires GROQ_API_KEY)
-python -m pytest tests/ -v --tb=short
+```text
+PDF Upload → Text Extraction → Field Extraction (LLM)
+→ Validation → Routing Engine → Assignment
+→ Reasoning (LLM) → Output UI
 ```
 
 ---
 
 ## 🛠️ Tech Stack
 
-| Technology | Purpose |
-|------------|---------|
-| **Python 3.10+** | Core language |
-| **LangGraph** | Agent workflow orchestration |
-| **LangChain** | LLM abstraction layer |
-| **Groq AI** | Fast LLM inference (Llama 3.3 70B) |
-| **pdfplumber** | PDF text extraction |
-| **FastAPI** | REST API server |
-| **python-dotenv** | Environment management |
+### Backend
+
+* FastAPI
+* Python
+* LangGraph
+* LangChain
+* Groq LLM
+
+### Frontend
+
+* HTML, CSS, JavaScript
+
+### Deployment
+
+* Render (Full-stack deployment)
 
 ---
 
-## 🔑 Key Design Decisions
+## 📂 Project Structure
 
-1. **Hybrid Architecture**: Routing is purely rule-based (deterministic), while extraction and reasoning use LLM (cognitive). This ensures reliable, auditable routing decisions.
+```
+backend/
+  ├── api.py
+  ├── extractor.py
+  ├── router.py
+  ├── validator.py
+  ├── reasoning.py
+  ├── graph.py
 
-2. **Fallback Reasoning**: If the LLM fails during reasoning generation, template-based fallback ensures the pipeline never crashes.
+frontend/
+  ├── index.html
+  ├── static/
+       ├── app.js
+       ├── style.css
 
-3. **Confidence Scoring**: Based on field completeness (extraction) and rule clarity (routing).
-
-4. **Priority-based Routing**: Rules are evaluated in strict priority order to prevent ambiguous decisions.
+render.yaml
+requirements.txt
+```
 
 ---
 
-## 📄 License
+## ⚙️ How to Run Locally
 
-MIT
+```bash
+git clone <repo-link>
+cd project-folder
+
+pip install -r requirements.txt
+
+uvicorn backend.api:app --reload
+```
+
+👉 Open:
+
+```
+http://127.0.0.1:8000
+```
+
+---
+
+## 🌐 Deployment
+
+This project is deployed on **Render** as a single service:
+
+* FastAPI serves backend + frontend
+* Static files served internally
+* No separate frontend hosting required
+
+---
+
+## 📊 Sample Output
+
+```json
+{
+  "recommendedRoute": "Fast-track",
+  "missingFields": [],
+  "confidenceScore": 0.91
+}
+```
+
+---
+
+## 🎥 Demo (Optional but recommended)
+
+👉 Add here:
+
+* Screen recording
+* Loom video link
+
+---
+
+## 🧠 Learnings
+
+* Built end-to-end AI system
+* Integrated LLM with rule-based logic
+* Designed agentic workflow using LangGraph
+* Deployed full-stack app on cloud
+
+---
+
+## 🚀 Future Improvements
+
+* Real-time fraud detection ML model
+* Database integration
+* Authentication system
+* Multi-document support
+
+---
+
+## 👨‍💻 Author
+
+**Amit Singh**
+B.Tech CSE | Data Science
+AI/ML Engineer
+
+---
+
+## ⭐ If you like this project
+
+Give it a star ⭐ on GitHub
