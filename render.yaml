@@ -1,7 +1,6 @@
 services:
-  # 1. Backend API (FastAPI)
   - type: web
-    name: insurance-agent-backend
+    name: insurance-agent
     env: python
     buildCommand: pip install -r requirements.txt
     startCommand: uvicorn backend.api:app --host 0.0.0.0 --port $PORT
@@ -12,10 +11,3 @@ services:
         value: llama-3.3-70b-versatile
       - key: PYTHON_VERSION
         value: 3.10.0
-
-  # 2. Frontend UI (Static Site)
-  - type: web
-    name: insurance-agent-frontend
-    env: static
-    buildCommand: ""
-    staticPublishPath: ./frontend
