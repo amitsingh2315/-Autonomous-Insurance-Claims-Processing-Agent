@@ -18,6 +18,12 @@ You can:
 * 🚀 View smart claim routing (Fast-track / Investigation / Manual / Specialist)
 * 👨‍💼 Automatic employee assignment based on claim type
 <img width="1500" height="800" alt="image" src="https://github.com/user-attachments/assets/b5835268-860f-4654-9308-7fa44a68cd68" />
+<img width="1500" height="500" alt="image" src="https://github.com/user-attachments/assets/3a2a850b-18b1-4876-bdc6-e88ded788fb6" />
+<img width="1500" height="357" alt="image" src="https://github.com/user-attachments/assets/9e8d2c02-284a-49d7-be08-284c5aaa7a2a" />
+<img width="1800" height="1027" alt="image" src="https://github.com/user-attachments/assets/0248d1cf-675f-4c82-a739-6b0e4bbce6e6" />
+
+
+
 
 
 ---
