@@ -17,6 +17,8 @@ You can:
 * 🧠 See decision breakdown (easy-to-understand flow)
 * 🚀 View smart claim routing (Fast-track / Investigation / Manual / Specialist)
 * 👨‍💼 Automatic employee assignment based on claim type
+<img width="1500" height="800" alt="image" src="https://github.com/user-attachments/assets/b5835268-860f-4654-9308-7fa44a68cd68" />
+
 
 ---
 
