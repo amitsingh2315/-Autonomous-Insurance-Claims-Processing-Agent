@@ -1,7 +1,45 @@
 # 🚀 Autonomous Insurance Claims Processing Agent
 
-🔗 **Live Demo:** https://autonomous-insurance-claims-processing.onrender.com/
-📦 **GitHub Repo:** (https://github.com/amitsingh2315/-Autonomous-Insurance-Claims-Processing-Agent)
+## 🚀 Live Demo
+
+🔗 **Try the Live Application:**
+👉 https://autonomous-insurance-claims-processing.onrender.com/
+
+---
+
+💡 This is a fully deployed, production-ready AI system.
+
+You can:
+
+* 📄 Upload FNOL (insurance claim) PDF
+* 🤖 Get AI-based field extraction
+* ⚠️ Detect missing or inconsistent data
+* 🧠 See decision breakdown (easy-to-understand flow)
+* 🚀 View smart claim routing (Fast-track / Investigation / Manual / Specialist)
+* 👨‍💼 Automatic employee assignment based on claim type
+
+---
+
+🎯 **Why this matters:**
+
+This is not just a demo — it simulates a real-world insurance claim processing workflow used in industry.
+
+* Combines AI + Rule-based logic
+* Handles real document inputs
+* Produces explainable decisions
+* Fully deployed on cloud (Render)
+
+---
+
+⚡ **Tip for reviewer:**
+
+Upload different PDFs to test:
+
+* Low damage → Fast-track
+* Missing fields → Manual Review
+* Fraud keywords → Investigation
+* Injury → Specialist Queue
+
 
 ---
 
